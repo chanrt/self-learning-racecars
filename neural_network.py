@@ -10,7 +10,7 @@ class Layer:
         return self.sigmoid(self.weights.dot(inputs) + self.biases)
 
     def sigmoid(self, x):
-        return 1 / (1 + exp(-x)) - 0.5
+        return 1 / (1 + exp(-x))
 
     def relu(self, x):
         outputs = zeros(len(x))
@@ -22,12 +22,16 @@ class Layer:
 
 
 class NeuralNetwork:
-    def __init__(self, layers):
+    def __init__(self, layers = None):
         self.layers = []
 
-        for i in range(len(layers) - 1):
-            new_layer = Layer(layers[i], layers[i + 1])
-            self.layers.append(new_layer)
+        if layers is not None:
+            for i in range(len(layers) - 1):
+                new_layer = Layer(layers[i], layers[i + 1])
+                self.layers.append(new_layer)
+
+    def set_layers(self, layers):
+        self.layers = layers
 
     def predict(self, inputs):
         input_vector = inputs

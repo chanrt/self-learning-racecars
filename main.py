@@ -1,8 +1,10 @@
 from numpy import zeros
+from time import time
 
 import pygame as pg
 
 from car import Car
+from genetic_algoritm import get_next_generation
 from settings import settings as s
 
 
@@ -26,7 +28,9 @@ def loop():
     track[1, s.num_cols // 2 - 1] = True
     track[1, s.num_cols // 2] = True
 
-    car = Car()
+    cars = []
+    for i in range(s.num_cars):
+        cars.append(Car())
 
     left_mouse_down = False
     right_mouse_down = False
@@ -34,6 +38,7 @@ def loop():
     edit_mode = True
 
     while True:
+        start = time()
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
@@ -49,8 +54,8 @@ def loop():
                     if status:
                         edit_mode = False
                 if event.key == pg.K_c:
-                    if edit_mode == False and not car.alive:
-                        car = Car()
+                    if edit_mode == False:
+                        cars = [Car() for _ in range(s.num_cars)]
 
             elif event.type == pg.MOUSEBUTTONDOWN:
                 if event.button == 1:
@@ -76,7 +81,8 @@ def loop():
                     s.track[row, col] = False
 
         if not edit_mode:
-            car.update()
+            for car in cars:
+                car.update()
 
         screen.fill(s.grass_color)
 
@@ -86,9 +92,22 @@ def loop():
             draw_grid()  
 
         if not edit_mode:
-            car.render()      
+            for car in cars:
+                car.render()
+
+            all_cars_dead = True
+            for car in cars:
+                if car.alive:
+                    all_cars_dead = False
+                    break
+
+            if all_cars_dead:
+                cars = get_next_generation(cars)
 
         pg.display.update()
+
+        end = time()
+        s.set_dt(end - start)
 
 
 def draw_track():

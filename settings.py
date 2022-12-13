@@ -5,6 +5,12 @@ import pygame as pg
 
 class Settings:
     def __init__(self):
+        self.fps = 60
+        self.dt = 1.0 / self.fps
+
+        # number of cars in each generation
+        self.num_cars = 100
+
         # the length of each grid (in pixels)
         self.grid_size = 75
 
@@ -17,8 +23,18 @@ class Settings:
         # angle of the lateral sensors (in radians)
         self.sensor_angle = radians(45)
 
+        # speed of the car (in pixels per second)
+        self.move_speed = 100
+
+        # steer rate of the car (in radians per second)
+        self.turn_speed = radians(45)
+
         # step size of ray tracing (in pixels)
         self.ray_step = 1
+
+        # genetic algo parameters
+        self.mutation_rate = 0.05
+        self.mutation_range = 0.5
 
         # colors
         self.road_color = pg.Color("#807e78")
@@ -43,6 +59,9 @@ class Settings:
 
     def set_track(self, track):
         self.track = track
+
+    def set_dt(self, dt):
+        self.dt = dt
 
 
 settings = Settings()
