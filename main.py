@@ -48,6 +48,9 @@ def loop():
 
                     if status:
                         edit_mode = False
+                if event.key == pg.K_c:
+                    if edit_mode == False and not car.alive:
+                        car = Car()
 
             elif event.type == pg.MOUSEBUTTONDOWN:
                 if event.button == 1:

@@ -1,7 +1,8 @@
-from math import cos, floor, pi, sin, sqrt
+from math import cos, floor, pi, radians, sin, sqrt
 from numba import njit
 import pygame as pg
 
+from neural_network import NeuralNetwork
 from settings import settings as s
 
 
@@ -29,19 +30,31 @@ class Car:
         self.x = (s.num_cols // 2 - 1 + 0.5) * s.grid_size
         self.y = (1 + 0.5) * s.grid_size
         self.theta = pi
+        self.neural_network = NeuralNetwork([3, 4, 2])
 
         self.alive = True
 
     def update(self):
         if self.alive:
-            # move forward
-            speed = 1
-            self.x += speed * cos(self.theta)
-            self.y -= speed * sin(self.theta)
-
             # sensor readings
             front_sensor, left_sensor, right_sensor = self.get_sensor_reading()
-            print(front_sensor, left_sensor, right_sensor)
+            front_sensor /= s.screen_width
+            left_sensor /= s.screen_width
+            right_sensor /= s.screen_width
+
+            left_prob, right_prob = self.neural_network.predict([front_sensor, left_sensor, right_sensor])
+
+            move_speed = 1
+            steer_speed = 0.01
+
+            # update car position
+            self.x += cos(self.theta) * move_speed
+            self.y -= sin(self.theta) * move_speed
+            
+            if left_prob > right_prob:
+                self.theta += steer_speed
+            else:
+                self.theta -= steer_speed
 
             row = floor(self.y // s.grid_size)
             col = floor(self.x // s.grid_size)
