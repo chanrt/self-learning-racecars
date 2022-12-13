@@ -10,6 +10,8 @@ class Settings:
         self.road_color = pg.Color("#807e78")
         self.grass_color = pg.Color("#006400")
         self.boundary_color = pg.Color("black")
+        self.start_color = pg.Color("yellow")
+        self.finish_color = pg.Color("blue")
         self.grid_color = pg.Color("white")
 
     def set_screen(self, screen):
