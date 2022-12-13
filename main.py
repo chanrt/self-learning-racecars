@@ -2,6 +2,7 @@ from numpy import zeros
 
 import pygame as pg
 
+from car import Car
 from settings import settings as s
 
 
@@ -24,6 +25,8 @@ def loop():
     # open start and finish
     track[1, s.num_cols // 2 - 1] = True
     track[1, s.num_cols // 2] = True
+
+    car = Car()
 
     left_mouse_down = False
     right_mouse_down = False
@@ -69,12 +72,16 @@ def loop():
                 else:
                     s.track[row, col] = False
 
+        car.update()
+
         screen.fill(s.grass_color)
 
         draw_track()
 
         if edit_mode:
-            draw_grid()        
+            draw_grid()  
+
+        car.render()      
 
         pg.display.update()
 
