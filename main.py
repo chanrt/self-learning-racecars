@@ -72,7 +72,8 @@ def loop():
                 else:
                     s.track[row, col] = False
 
-        car.update()
+        if not edit_mode:
+            car.update()
 
         screen.fill(s.grass_color)
 
@@ -81,7 +82,8 @@ def loop():
         if edit_mode:
             draw_grid()  
 
-        car.render()      
+        if not edit_mode:
+            car.render()      
 
         pg.display.update()
 

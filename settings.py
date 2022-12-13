@@ -1,4 +1,4 @@
-from math import ceil, atan
+from math import atan, ceil, radians
 
 import pygame as pg
 
@@ -14,6 +14,12 @@ class Settings:
         # length of the car with respect to it's thickness
         self.car_length_ratio = 2
 
+        # angle of the lateral sensors (in radians)
+        self.sensor_angle = radians(45)
+
+        # step size of ray tracing (in pixels)
+        self.ray_step = 1
+
         # colors
         self.road_color = pg.Color("#807e78")
         self.grass_color = pg.Color("#006400")
@@ -26,7 +32,7 @@ class Settings:
         self.car_thickness = self.grid_size * self.car_thickness_ratio
         self.car_length = self.car_thickness * self.car_length_ratio
         self.car_rect_angle = abs(atan(self.car_thickness / self.car_length))
-        self.angle_correction = 0.4
+        self.angle_correction = self.car_rect_angle
 
     def set_screen(self, screen):
         self.screen = screen
