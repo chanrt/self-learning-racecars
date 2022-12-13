@@ -40,6 +40,11 @@ def loop():
                 if event.key == pg.K_ESCAPE:
                     pg.quit()
                     return
+                if event.key == pg.K_SPACE:
+                    status = verify_track()
+
+                    if status:
+                        edit_mode = False
 
             elif event.type == pg.MOUSEBUTTONDOWN:
                 if event.button == 1:
@@ -91,6 +96,18 @@ def draw_track():
             pg.draw.rect(s.screen, color, (col * s.grid_size, row * s.grid_size, s.grid_size, s.grid_size))
 
 
+def verify_track():
+    for row in range(1, s.num_rows - 1):
+        for col in range(1, s.num_cols - 1):
+            if s.track[row, col]:
+                if num_neighbours(row, col) != 2:
+                    print(f"Invalid track: problem detected at ({row}, {col})")
+                    return False
+
+    print("Valid track")
+    return True
+
+
 def draw_grid():
     for i in range(0, s.screen_width, s.grid_size):
         pg.draw.line(s.screen, s.grid_color, (i, 0), (i, s.screen_height))
@@ -111,6 +128,21 @@ def is_special_tile(row, col):
         return True
     else:
         return False
+
+
+def num_neighbours(row, col):
+    num_neigh = 0
+
+    if s.track[row - 1, col]:
+        num_neigh += 1
+    if s.track[row + 1, col]:
+        num_neigh += 1
+    if s.track[row, col - 1]:
+        num_neigh += 1
+    if s.track[row, col + 1]:
+        num_neigh += 1
+
+    return num_neigh
 
 
 if __name__ == '__main__':
